@@ -17,63 +17,153 @@
             {% endif %}
 
             <div class="mb-3">
-                <label for="{{ form.full_name.id_for_label }}" class="form-label">Full Name</label>
+                <label for="{{ form.full_name.id_for_label }}" class="form-label">Full Name <span class="text-danger">*</span></label>
                 {{ form.full_name }}
+                <small class="form-text text-muted">Enter patient's complete name (2-100 characters)</small>
                 {% if form.full_name.errors %}
-                    <div class="text-danger">{{ form.full_name.errors }}</div>
+                    <div class="alert alert-danger alert-sm mt-2 py-1">
+                        <i class="fas fa-exclamation-circle"></i> 
+                        {% for error in form.full_name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
                 {% endif %}
             </div>
 
             <div class="mb-3">
-                <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
+                <label for="{{ form.email.id_for_label }}" class="form-label">Email <span class="text-danger">*</span></label>
                 {{ form.email }}
+                <small class="form-text text-muted">Valid email format required (e.g., patient@example.com)</small>
                 {% if form.email.errors %}
-                    <div class="text-danger">{{ form.email.errors }}</div>
+                    <div class="alert alert-danger alert-sm mt-2 py-1">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {% for error in form.email.errors %}
+                            <span>
+                                {% if "valid" in error|lower %}
+                                    ❌ Please enter a valid email address
+                                {% elif "already" in error|lower %}
+                                    ❌ This email is already registered
+                                {% else %}
+                                    {{ error }}
+                                {% endif %}
+                            </span>
+                        {% endfor %}
+                    </div>
                 {% endif %}
             </div>
 
             <div class="mb-3">
-                <label for="{{ form.date_of_birth.id_for_label }}" class="form-label">Date of Birth</label>
+                <label for="{{ form.date_of_birth.id_for_label }}" class="form-label">Date of Birth <span class="text-danger">*</span></label>
                 {{ form.date_of_birth }}
+                <small class="form-text text-muted">Select a valid date (not in the future, patient should be at least 18 years old)</small>
                 {% if form.date_of_birth.errors %}
-                    <div class="text-danger">{{ form.date_of_birth.errors }}</div>
+                    <div class="alert alert-danger alert-sm mt-2 py-1">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {% for error in form.date_of_birth.errors %}
+                            <span>
+                                {% if "future" in error|lower %}
+                                    ❌ Date of birth cannot be in the future
+                                {% elif "invalid" in error|lower %}
+                                    ❌ Invalid date format. Please use YYYY-MM-DD
+                                {% else %}
+                                    ❌ {{ error }}
+                                {% endif %}
+                            </span>
+                        {% endfor %}
+                    </div>
                 {% endif %}
+                <div id="dob-validation-msg" class="text-muted small mt-2"></div>
             </div>
 
             <div class="mb-3">
-                <label for="{{ form.glucose.id_for_label }}" class="form-label">Glucose (mg/dL)</label>
+                <label for="{{ form.glucose.id_for_label }}" class="form-label">Glucose (mg/dL) <span class="text-danger">*</span></label>
                 {{ form.glucose }}
+                <small class="form-text text-muted">Normal range: 70-100 (fasting). Enter a value greater than 0</small>
                 {% if form.glucose.errors %}
-                    <div class="text-danger">{{ form.glucose.errors }}</div>
+                    <div class="alert alert-danger alert-sm mt-2 py-1">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {% for error in form.glucose.errors %}
+                            <span>
+                                {% if "greater" in error|lower or "less" in error|lower %}
+                                    ❌ Glucose must be a positive number (> 0)
+                                {% elif "invalid" in error|lower %}
+                                    ❌ Please enter a valid number for glucose
+                                {% else %}
+                                    ❌ {{ error }}
+                                {% endif %}
+                            </span>
+                        {% endfor %}
+                    </div>
                 {% endif %}
+                <div id="glucose-validation-msg" class="text-muted small mt-2"></div>
             </div>
 
             <div class="mb-3">
-                <label for="{{ form.haemoglobin.id_for_label }}" class="form-label">Haemoglobin (g/dL)</label>
+                <label for="{{ form.haemoglobin.id_for_label }}" class="form-label">Haemoglobin (g/dL) <span class="text-danger">*</span></label>
                 {{ form.haemoglobin }}
+                <small class="form-text text-muted">Normal range: 13.5-17.5 (Males), 12.0-15.5 (Females). Enter a value greater than 0</small>
                 {% if form.haemoglobin.errors %}
-                    <div class="text-danger">{{ form.haemoglobin.errors }}</div>
+                    <div class="alert alert-danger alert-sm mt-2 py-1">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {% for error in form.haemoglobin.errors %}
+                            <span>
+                                {% if "greater" in error|lower or "less" in error|lower %}
+                                    ❌ Haemoglobin must be a positive number (> 0)
+                                {% elif "unusually high" in error|lower %}
+                                    ⚠️ Warning: Haemoglobin value seems unusually high (>20 g/dL)
+                                {% elif "invalid" in error|lower %}
+                                    ❌ Please enter a valid number for haemoglobin
+                                {% else %}
+                                    ❌ {{ error }}
+                                {% endif %}
+                            </span>
+                        {% endfor %}
+                    </div>
                 {% endif %}
+                <div id="haemoglobin-validation-msg" class="text-muted small mt-2"></div>
             </div>
 
             <div class="mb-3">
-                <label for="{{ form.cholesterol.id_for_label }}" class="form-label">Cholesterol (mg/dL)</label>
+                <label for="{{ form.cholesterol.id_for_label }}" class="form-label">Cholesterol (mg/dL) <span class="text-danger">*</span></label>
                 {{ form.cholesterol }}
+                <small class="form-text text-muted">Desirable: Less than 200. Enter a value greater than 0</small>
                 {% if form.cholesterol.errors %}
-                    <div class="text-danger">{{ form.cholesterol.errors }}</div>
+                    <div class="alert alert-danger alert-sm mt-2 py-1">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {% for error in form.cholesterol.errors %}
+                            <span>
+                                {% if "greater" in error|lower or "less" in error|lower %}
+                                    ❌ Cholesterol must be a positive number (> 0)
+                                {% elif "unusually high" in error|lower %}
+                                    ⚠️ Warning: Cholesterol value seems unusually high (>500 mg/dL)
+                                {% elif "invalid" in error|lower %}
+                                    ❌ Please enter a valid number for cholesterol
+                                {% else %}
+                                    ❌ {{ error }}
+                                {% endif %}
+                            </span>
+                        {% endfor %}
+                    </div>
                 {% endif %}
+                <div id="cholesterol-validation-msg" class="text-muted small mt-2"></div>
             </div>
 
             <div class="mb-3">
-                <label for="{{ form.remarks.id_for_label }}" class="form-label">Remarks</label>
+                <label for="{{ form.remarks.id_for_label }}" class="form-label">Remarks (Optional)</label>
                 {{ form.remarks }}
+                <small class="form-text text-muted">Add any additional notes or observations about the patient</small>
                 {% if form.remarks.errors %}
-                    <div class="text-danger">{{ form.remarks.errors }}</div>
+                    <div class="alert alert-danger alert-sm mt-2 py-1">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {% for error in form.remarks.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
                 {% endif %}
             </div>
 
             <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
-                <button type="submit" class="btn btn-primary">💾 Save</button>
+                <button type="submit" class="btn btn-primary" id="submit-btn">💾 Save</button>
                 <a href="{% url 'patient_list' %}" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
@@ -88,5 +178,192 @@
         border-color: #0d6efd;
         box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
     }
+    .form-control.is-invalid {
+        border-color: #dc3545;
+    }
+    .alert-sm {
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+    }
+    .text-danger {
+        color: #dc3545;
+    }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const dobInput = document.getElementById('{{ form.date_of_birth.id_for_label }}');
+    const glucoseInput = document.getElementById('{{ form.glucose.id_for_label }}');
+    const haemoglobinInput = document.getElementById('{{ form.haemoglobin.id_for_label }}');
+    const cholesterolInput = document.getElementById('{{ form.cholesterol.id_for_label }}');
+    const emailInput = document.getElementById('{{ form.email.id_for_label }}');
+    const fullNameInput = document.getElementById('{{ form.full_name.id_for_label }}');
+    const dobValidationMsg = document.getElementById('dob-validation-msg');
+    const glucoseValidationMsg = document.getElementById('glucose-validation-msg');
+    const haemoglobinValidationMsg = document.getElementById('haemoglobin-validation-msg');
+    const cholesterolValidationMsg = document.getElementById('cholesterol-validation-msg');
+    
+    // Validate Full Name
+    if (fullNameInput) {
+        fullNameInput.addEventListener('blur', function() {
+            const value = this.value.trim();
+            if (value && value.length < 2) {
+                this.classList.add('is-invalid');
+            } else if (value.length <= 100) {
+                this.classList.remove('is-invalid');
+            }
+        });
+    }
+    
+    // Validate Email
+    if (emailInput) {
+        emailInput.addEventListener('blur', function() {
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (this.value && !emailPattern.test(this.value)) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid');
+            }
+        });
+    }
+
+    // Validate Date of Birth
+    if (dobInput) {
+        dobInput.addEventListener('change', function() {
+            const dob = new Date(this.value);
+            const today = new Date();
+            const age = today.getFullYear() - dob.getFullYear();
+            const monthDiff = today.getMonth() - dob.getMonth();
+            const actualAge = monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate()) ? age - 1 : age;
+
+            if (this.value) {
+                if (dob > today) {
+                    this.classList.add('is-invalid');
+                    dobValidationMsg.innerHTML = '<span class="text-danger">❌ Date cannot be in the future</span>';
+                } else if (actualAge < 0) {
+                    this.classList.add('is-invalid');
+                    dobValidationMsg.innerHTML = '<span class="text-danger">❌ Invalid date</span>';
+                } else if (actualAge < 18) {
+                    this.classList.add('is-warning');
+                    dobValidationMsg.innerHTML = '<span class="text-warning">⚠️ Patient is ' + actualAge + ' years old</span>';
+                } else {
+                    this.classList.remove('is-invalid');
+                    dobValidationMsg.innerHTML = '<span class="text-success">✓ Age: ' + actualAge + ' years</span>';
+                }
+            } else {
+                this.classList.remove('is-invalid');
+                dobValidationMsg.innerHTML = '';
+            }
+        });
+    }
+
+    // Validate Glucose
+    if (glucoseInput) {
+        glucoseInput.addEventListener('blur', function() {
+            const value = parseFloat(this.value);
+            if (this.value) {
+                if (isNaN(value) || value <= 0) {
+                    this.classList.add('is-invalid');
+                    glucoseValidationMsg.innerHTML = '<span class="text-danger">❌ Must be a positive number</span>';
+                } else if (value < 70) {
+                    this.classList.add('is-warning');
+                    glucoseValidationMsg.innerHTML = '<span class="text-warning">⚠️ Low glucose level (' + value + ' mg/dL)</span>';
+                } else if (value > 300) {
+                    this.classList.add('is-warning');
+                    glucoseValidationMsg.innerHTML = '<span class="text-warning">⚠️ High glucose level (' + value + ' mg/dL)</span>';
+                } else {
+                    this.classList.remove('is-invalid');
+                    glucoseValidationMsg.innerHTML = '<span class="text-success">✓ Glucose: ' + value + ' mg/dL</span>';
+                }
+            } else {
+                this.classList.remove('is-invalid');
+                glucoseValidationMsg.innerHTML = '';
+            }
+        });
+    }
+
+    // Validate Haemoglobin
+    if (haemoglobinInput) {
+        haemoglobinInput.addEventListener('blur', function() {
+            const value = parseFloat(this.value);
+            if (this.value) {
+                if (isNaN(value) || value <= 0) {
+                    this.classList.add('is-invalid');
+                    haemoglobinValidationMsg.innerHTML = '<span class="text-danger">❌ Must be a positive number</span>';
+                } else if (value < 10) {
+                    this.classList.add('is-warning');
+                    haemoglobinValidationMsg.innerHTML = '<span class="text-warning">⚠️ Low haemoglobin level (' + value + ' g/dL)</span>';
+                } else if (value > 20) {
+                    this.classList.add('is-warning');
+                    haemoglobinValidationMsg.innerHTML = '<span class="text-warning">⚠️ High haemoglobin level (' + value + ' g/dL)</span>';
+                } else {
+                    this.classList.remove('is-invalid');
+                    haemoglobinValidationMsg.innerHTML = '<span class="text-success">✓ Haemoglobin: ' + value + ' g/dL</span>';
+                }
+            } else {
+                this.classList.remove('is-invalid');
+                haemoglobinValidationMsg.innerHTML = '';
+            }
+        });
+    }
+
+    // Validate Cholesterol
+    if (cholesterolInput) {
+        cholesterolInput.addEventListener('blur', function() {
+            const value = parseFloat(this.value);
+            if (this.value) {
+                if (isNaN(value) || value <= 0) {
+                    this.classList.add('is-invalid');
+                    cholesterolValidationMsg.innerHTML = '<span class="text-danger">❌ Must be a positive number</span>';
+                } else if (value < 100) {
+                    this.classList.add('is-warning');
+                    cholesterolValidationMsg.innerHTML = '<span class="text-warning">⚠️ Low cholesterol level (' + value + ' mg/dL)</span>';
+                } else if (value > 300) {
+                    this.classList.add('is-warning');
+                    cholesterolValidationMsg.innerHTML = '<span class="text-warning">⚠️ High cholesterol level (' + value + ' mg/dL)</span>';
+                } else {
+                    this.classList.remove('is-invalid');
+                    cholesterolValidationMsg.innerHTML = '<span class="text-success">✓ Cholesterol: ' + value + ' mg/dL</span>';
+                }
+            } else {
+                this.classList.remove('is-invalid');
+                cholesterolValidationMsg.innerHTML = '';
+            }
+        });
+    }
+
+    // Form submission validation
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+            
+            // Check required fields
+            if (!fullNameInput || !fullNameInput.value.trim()) {
+                isValid = false;
+            }
+            if (!emailInput || !emailInput.value.trim()) {
+                isValid = false;
+            }
+            if (!dobInput || !dobInput.value) {
+                isValid = false;
+            }
+            if (!glucoseInput || !glucoseInput.value) {
+                isValid = false;
+            }
+            if (!haemoglobinInput || !haemoglobinInput.value) {
+                isValid = false;
+            }
+            if (!cholesterolInput || !cholesterolInput.value) {
+                isValid = false;
+            }
+            
+            if (!isValid) {
+                e.preventDefault();
+                alert('❌ Please fill in all required fields correctly');
+            }
+        });
+    }
+});
+</script>
 {% endblock %}
