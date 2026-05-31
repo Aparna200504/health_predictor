@@ -1,0 +1,92 @@
+{% extends "patients/base.html" %}
+
+{% block title %}{% if form.instance.pk %}Edit{% else %}Add{% endif %} Patient - Health Prediction{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h1>{% if form.instance.pk %}✏️ Edit Patient{% else %}➕ Add New Patient{% endif %}</h1>
+
+        <form method="post" class="mt-4">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="mb-3">
+                <label for="{{ form.full_name.id_for_label }}" class="form-label">Full Name</label>
+                {{ form.full_name }}
+                {% if form.full_name.errors %}
+                    <div class="text-danger">{{ form.full_name.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <div class="text-danger">{{ form.email.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ form.date_of_birth.id_for_label }}" class="form-label">Date of Birth</label>
+                {{ form.date_of_birth }}
+                {% if form.date_of_birth.errors %}
+                    <div class="text-danger">{{ form.date_of_birth.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ form.glucose.id_for_label }}" class="form-label">Glucose (mg/dL)</label>
+                {{ form.glucose }}
+                {% if form.glucose.errors %}
+                    <div class="text-danger">{{ form.glucose.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ form.haemoglobin.id_for_label }}" class="form-label">Haemoglobin (g/dL)</label>
+                {{ form.haemoglobin }}
+                {% if form.haemoglobin.errors %}
+                    <div class="text-danger">{{ form.haemoglobin.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ form.cholesterol.id_for_label }}" class="form-label">Cholesterol (mg/dL)</label>
+                {{ form.cholesterol }}
+                {% if form.cholesterol.errors %}
+                    <div class="text-danger">{{ form.cholesterol.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ form.remarks.id_for_label }}" class="form-label">Remarks</label>
+                {{ form.remarks }}
+                {% if form.remarks.errors %}
+                    <div class="text-danger">{{ form.remarks.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
+                <button type="submit" class="btn btn-primary">💾 Save</button>
+                <a href="{% url 'patient_list' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .form-control, .form-select {
+        border-color: #ddd;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+</style>
+{% endblock %}

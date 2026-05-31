@@ -1,0 +1,24 @@
+{% extends "patients/base.html" %}
+
+{% block title %}Delete Patient - Health Prediction{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">⚠️ Delete Patient</h4>
+            <p>Are you sure you want to delete <strong>{{ patient.full_name }}</strong>?</p>
+            <hr>
+            <p class="mb-0">This action cannot be undone.</p>
+        </div>
+
+        <form method="post" class="mt-4">
+            {% csrf_token %}
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <button type="submit" class="btn btn-danger btn-lg">Yes, Delete</button>
+                <a href="{% url 'patient_list' %}" class="btn btn-secondary btn-lg">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

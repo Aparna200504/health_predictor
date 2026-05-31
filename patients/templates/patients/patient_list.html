@@ -1,0 +1,54 @@
+{% extends "patients/base.html" %}
+
+{% block title %}Patient Records - Health Prediction{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1>📋 Patient Records</h1>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'patient_create' %}" class="btn btn-primary">➕ Add New Patient</a>
+    </div>
+</div>
+
+{% if patients %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Date of Birth</th>
+                    <th>Email</th>
+                    <th>Glucose</th>
+                    <th>Haemoglobin</th>
+                    <th>Cholesterol</th>
+                    <th>Remarks</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for patient in patients %}
+                <tr>
+                    <td><strong>{{ patient.full_name }}</strong></td>
+                    <td>{{ patient.date_of_birth }}</td>
+                    <td>{{ patient.email }}</td>
+                    <td>{{ patient.glucose }}</td>
+                    <td>{{ patient.haemoglobin }}</td>
+                    <td>{{ patient.cholesterol }}</td>
+                    <td><em>{{ patient.remarks }}</em></td>
+                    <td>
+                        <a href="{% url 'patient_update' patient.pk %}" class="btn btn-sm btn-warning">✏️ Edit</a>
+                        <a href="{% url 'patient_delete' patient.pk %}" class="btn btn-sm btn-danger">🗑️ Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <p>No patients found. <a href="{% url 'patient_create' %}">Add one to get started</a></p>
+    </div>
+{% endif %}
+{% endblock %}
